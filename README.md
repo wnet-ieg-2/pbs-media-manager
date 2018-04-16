@@ -22,7 +22,7 @@ NOTE: TP Media IDs are NOT, by default, returned in the data from the Media Mana
 * William Tam, WNET/IEG
 
 ## Licence
-The PBS Media Manager Client is licensed under the GPL v2 or later.
+PBS Media Manager for WordPress is licensed under the GPL v2 or later.
 
 > This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License, version 2, as
