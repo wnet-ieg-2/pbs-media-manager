@@ -18,12 +18,12 @@ NOTE: TP Media IDs are NOT, by default, returned in the data from the Media Mana
 Once you've enabled the plugin, the PBS_Media_Manager class will be available to program with.  It has a single method (at this point), 'get_media_manager_client()'.   This will create a new instance of the PBS_Media_Manager_API_Client https://github.com/tamw-wnet/PBS_Media_Manager_Client using the API keys etc you've added in the settings page for this plugin.  
 
 Once the client has been created, all methods detailed in that repository are available -- for instance, here's how to get the show-level information about the PBS NewsHour; 
-``php
+```php
 $pluginobj =  new PBS_Media_Manager(__FILE__);
 $client = $pluginobj->get_media_manager_client();
 $show_slug = 'newshour';
 $showdata = $client->get_item_of_type($show_slug, 'show');
-``
+```
 $showdata will be an object containing all the top-level information about the show.
 
 
