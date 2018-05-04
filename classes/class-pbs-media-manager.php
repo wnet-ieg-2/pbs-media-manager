@@ -13,9 +13,9 @@ class PBS_Media_Manager {
   public $version;
 
   public function __construct( $file ) {
-    $this->dir = dirname( $file );
-    $this->file = $file;
-		$this->assets_url = esc_url( trailingslashit( plugins_url( '/assets/', $file ) ) );
+    $this->file = __FILE__;
+    $this->dir = dirname(__FILE__);
+		$this->assets_url = esc_url( trailingslashit( plugins_url( '/assets/', $this->dir ) ) );
     $this->token = 'pbs_media_manager';
     $this->version = '0.1';
 	}
@@ -23,7 +23,7 @@ class PBS_Media_Manager {
 
   public function get_media_manager_client( $api_key=false, $api_secret=false, $api_endpoint=false ) {
     if (!class_exists('PBS_Media_Manager_API_Client')) {
-      if (!include_once($this->dir . '/libs/class-PBS-Media-Manager-API-Client.php')) {
+      if (!include_once(trailingslashit($this->dir) . '../libs/class-PBS-Media-Manager-API-Client.php')) {
         return array('errors' => 'Media Manager API Client not present');
       }
     }
