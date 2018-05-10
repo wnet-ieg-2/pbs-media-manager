@@ -43,5 +43,47 @@ class PBS_Media_Manager {
     return $client;
   }
 
+  public function derive_asset_availability_from_asset_data($asset) {
+    /* this helper function returns the current availability for an asset from the record,
+     * including "not_available" if there's some sort of error, and 
+     * optionally an "expiration_date" value if there's a future expiration date for that window
+     * and optionally an "error" which will be the error code if it was some sort of error */
+    $window = 'not_available';
+    $expire_date = null;
+    if (!empty($asset['errors'])) {
+      // get the error code and return that
+      $status = !empty($asset['errors']['info']['http_code']) ? $asset['errors']['info']['http_code'] : 'unknown_error';
+      return array('window' => $window, 'error' => $status);
+    }
+    // check for passport availability stuff
+    $attribs = $asset['data']['attributes'];
+    if (!empty($attribs['availability_window'])) {
+      // easier:  if a station uid was passed will we get this value, it will reflect the current availability
+      $window = $attribs['availability_window'];
+      $expire_date = $array['availabilities'][$window]['end']; // will either be null or a date string in the future
+    } else {
+      // otherwise derive it from todays date
+      $current_timestamp = strtotime("now");
+      // go through from most restrictive to least 
+      $windows = array('station_members', 'all_members', 'public');
+      foreach ($windows as $this_window) {
+        if (empty( $attribs['availabilities'][$this_window]['start'])) {
+          continue;
+        }
+        $this_available_date = $attribs['availabilities'][$this_window]['start'];
+        $this_available_ts = strtotime($this_available_date);
+        if ($this_available_ts < $current_timestamp) {
+          // the window started in the past, but may not have expired yet
+          if (empty( $attribs['availabilities'][$this_window]['end']) || (strtotime($attribs['availabilities'][$this_window]['end']) > $current_timestamp ) ) {
+            // expiration date is either unset or in the future, we are in this window now!
+            $window = $this_window;
+            $expire_date = $attribs['availabilities'][$this_window]['end']; // will either be null or a date string in the future
+          }
+          // the else case for above is that the window expired in the past, so we don't care about it
+        }
+      }
+    }
+    return array('window' => $window, 'expiration_date' => $expire_date );
+  }
 
 }
