@@ -73,12 +73,8 @@ class PBS_Media_Manager_Settings {
 
     add_settings_field( 'mm_api_secret', 'Media Manager API Secret', array( $this, 'settings_field'), $this->token, 'general_settings', array('setting' => $this->token, 'field' => 'mm_api_secret', 'class' => 'regular-text', 'label' => '' ) );
 
-    add_settings_field( 'channel', 'Channel Identifier', array( $this, 'settings_field'), $this->token, 'general_settings', array('setting' => $this->token, 'field' => 'channel', 'class' => 'regular-text', 'label' => 'Value should be the short public name of yuor station, like PBSSocal or THIRTEEN' ) );
-
-    add_settings_field( 'station_uid', 'Station UID', array( $this, 'settings_field'), $this->token, 'general_settings', array('setting' => $this->token, 'field' => 'station_uid', 'class' => 'regular-text', 'label' => 'Hexadecimal 
+    add_settings_field( 'station_uid', 'Station UID', array( $this, 'settings_field'), $this->token, 'general_settings', array('setting' => $this->token, 'field' => 'station_uid', 'class' => 'regular-text', 'label' => 'Optional: If making queries from a station context, hexadecimal 
 ID as used by PBS to identify the station. Visit https://station.services.pbs.org/api/public/v1/stations/?call_sign={station_callsign} to get your Station ID' ) );
-
-    add_settings_field( 'call_letters', 'Station Call Letters', array( $this, 'settings_field'), $this->token, 'general_settings', array('setting' => $this->token, 'field' => 'call_letters', 'class' => 'regular-text', 'label' => 'Call letters that PBS uses to identify the station, might not be the actual call letters'  ) );
 
     add_settings_field( 'enable_passport', 'Enable Passport', array( $this, 'settings_field'), $this->token, 'general_settings', array('setting' => $this->token, 'field' => 'enable_passport', 'type'=> 'checkbox', 'options' => array('true'), 'class' => '', 'label' => 'Check to enable displaying Passport videos on program pages' ) );
 
