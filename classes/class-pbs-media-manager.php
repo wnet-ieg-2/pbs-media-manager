@@ -11,6 +11,7 @@ class PBS_Media_Manager {
   public $assets_url;
   public $token;
   public $version;
+  public $options;
 
   public function __construct( $file ) {
     $this->file = __FILE__;
@@ -18,6 +19,7 @@ class PBS_Media_Manager {
 		$this->assets_url = esc_url( trailingslashit( plugins_url( '/assets/', $this->dir ) ) );
     $this->token = 'pbs_media_manager';
     $this->version = '0.1';
+    $this->options = get_option($this->token);
 	}
 
 
@@ -27,7 +29,7 @@ class PBS_Media_Manager {
         return array('errors' => 'Media Manager API Client not present');
       }
     }
-    $options = get_option($this->token);
+    $options = $this->options;
     $client_key = !empty($options['mm_api_id']) ? $options['mm_api_id'] : false;
     $client_secret = !empty($options['mm_api_secret']) ? $options['mm_api_secret'] : false;
     $client_endpoint = !empty($options['mm_api_base']) ? $options['mm_api_base'] : false;
