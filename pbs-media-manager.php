@@ -19,7 +19,7 @@ $pluginobj =  new PBS_Media_Manager(__FILE__);
 
 
 # Setup the settings page but only if admin
-if (is_admin) {
+if (is_admin()) {
   require_once('classes/class-pbs-media-manager-settings.php');
   $settingsobj = new PBS_Media_Manager_Settings(__FILE__);
 }
