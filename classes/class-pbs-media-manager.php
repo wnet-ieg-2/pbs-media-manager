@@ -53,6 +53,8 @@ class PBS_Media_Manager {
     $window = 'not_available';
     $expire_date = null;
     $current_timestamp = strtotime("now");
+    $next_available_date = false;
+    $next_available_date_ts = 0;
     if (!empty($asset['errors'])) {
       // get the error code and return that
       $status = !empty($asset['errors']['info']['http_code']) ? $asset['errors']['info']['http_code'] : 'unknown_error';
@@ -81,10 +83,26 @@ class PBS_Media_Manager {
             $expire_date = $attribs['availabilities'][$this_window]['end']; // will either be null or a date string in the future
           }
           // the else case for above is that the window expired in the past, so we don't care about it
+        } else {
+          // this availability starts now or in the future
+          if (!$next_available_date_ts) {
+            // not set, lets set it
+            $next_available_date_ts = $this_available_ts;
+          }
+          if ($this_available_ts <= $next_available_date_ts) {
+            // happening sooner than what is on record
+            // gt or eq because this one is more permissive
+            $next_available_date_ts = $this_available_ts;
+            $next_available_date = $this_available_date;
+          }
         }
       }
     }
-    return array('window' => $window, 'expiration_date' => $expire_date );
+    $response = array('window' => $window, 'expiration_date' => $expire_date );
+    if ($window == 'not_available' && $next_available_date ) {
+      $response['future_available_date'] = $next_available_date;
+    }
+    return $response;
   }
 
 }
