@@ -52,6 +52,7 @@ class PBS_Media_Manager {
      * and optionally an "error" which will be the error code if it was some sort of error */
     $window = 'not_available';
     $expire_date = null;
+    $current_timestamp = strtotime("now");
     if (!empty($asset['errors'])) {
       // get the error code and return that
       $status = !empty($asset['errors']['info']['http_code']) ? $asset['errors']['info']['http_code'] : 'unknown_error';
@@ -64,8 +65,6 @@ class PBS_Media_Manager {
       $window = $attribs['availability_window'];
       $expire_date = $array['availabilities'][$window]['end']; // will either be null or a date string in the future
     } else {
-      // otherwise derive it from todays date
-      $current_timestamp = strtotime("now");
       // go through from most restrictive to least 
       $windows = array('station_members', 'all_members', 'public');
       foreach ($windows as $this_window) {
