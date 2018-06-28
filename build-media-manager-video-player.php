@@ -21,10 +21,10 @@ function build_media_manager_video_player($asset) {
   $plugin = new PBS_Media_Manager();
 
   // get the availability of the video
-  $availability = $this->derive_asset_availability_from_asset_data($asset);
+  $availability = $plugin->derive_asset_availability_from_asset_data($asset);
   $window = $availability['window']; 
   if ($window != 'public') {
-    if ($this->options['enable_passport'] != 'true') {
+    if ($plugin->options['enable_passport'] != 'true') {
       // only display public videos if passport not enabled
       return;
     }
