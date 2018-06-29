@@ -142,6 +142,10 @@ ID as used by PBS to identify the station. Visit https://station.services.pbs.or
         <option>tp_media_id</option>
         <option>asset</option>
         <option>show</option>
+        <option>episode</option>
+        <option>special</option>
+        <option>season</option>
+        <option>collection</option>
         <option>franchise</option>
       </select>
       <input type="text" name="id_or_slug" />
