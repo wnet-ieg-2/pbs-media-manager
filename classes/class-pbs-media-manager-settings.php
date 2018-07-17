@@ -178,6 +178,9 @@ ID as used by PBS to identify the station. Visit https://station.services.pbs.or
     if (empty($id_or_slug)) {
       $return = "id or slug required";
     }
+    if ($endpoint == "collection" ) {
+      $defaultargs['fetch-related'] = TRUE; 
+    }
     if ($endpoint == "tp_media_id") {
       $return = $client->get_asset_by_tp_media_id($id_or_slug);
     } else {
