@@ -127,7 +127,11 @@ class PBS_Media_Manager_API_Client {
         continue;
       }
       $middle = explode(": ", $part, 2);
-      $myarray[trim($middle[0])] = trim($middle[1]);
+      if (isset($middle[1])) {
+        $myarray[trim($middle[0])] = trim($middle[1]);
+      } else {
+        $myarray[] = trim($middle[0]); 
+      }
     }
     return $myarray;
   }
