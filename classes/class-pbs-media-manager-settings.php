@@ -90,9 +90,9 @@ ID as used by PBS to identify the station. Visit https://station.services.pbs.or
     $field = esc_attr( $args['field'] );
     $label = esc_attr( $args['label'] );
     $class = esc_attr( $args['class'] );
-    $type = ($args['type'] ? esc_attr( $args['type'] ) : 'text' );
-    $options = (is_array($args['options']) ? $args['options'] : array('true', 'false') );
-    $default = ($args['default'] ? esc_attr( $args['default'] ) : '' );
+    $type = ( isset($args['type']) ? esc_attr( $args['type'] ) : 'text' );
+    $options = ( isset($args['options']) && is_array($args['options']) ? $args['options'] : array('true', 'false') );
+    $default = ( isset($args['default']) ? esc_attr( $args['default'] ) : '' );
     switch ($type) {
       case "checkbox":
         // dont set a default for checkboxes
