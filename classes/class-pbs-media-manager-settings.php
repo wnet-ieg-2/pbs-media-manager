@@ -96,7 +96,7 @@ ID as used by PBS to identify the station. Visit https://station.services.pbs.or
     switch ($type) {
       case "checkbox":
         // dont set a default for checkboxes
-        $value = $setting[$field];
+        $value = ( isset($setting[$field]) ? $setting[$field] : null );
         $values = ( is_array($value) ? $values = $value : array($value) );
         foreach($options as $option) {
           // each option can be an array but doesn't have to be
