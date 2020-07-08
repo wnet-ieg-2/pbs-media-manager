@@ -1,4 +1,4 @@
-#PBS Media Manager for WordPress
+# PBS Media Manager for WordPress
 
 This plugin provides the basic functionality for including the PBS Media Manager API Client into WordPress.   
 
