@@ -55,7 +55,7 @@ class PBS_Media_Manager {
     $current_timestamp = strtotime("now");
     $next_available_date = false;
     $next_available_date_ts = 0;
-    $next_change_date = null;
+    $next_change_date = false;
     $next_change_date_ts = 0;
     if (!empty($asset['errors'])) {
       // get the error code and return that
@@ -79,19 +79,24 @@ class PBS_Media_Manager {
         $this_available_date = $attribs['availabilities'][$this_window]['start'];
         $this_available_ts = strtotime($this_available_date);
 
+
         $this_expire_date = $attribs['availabilities'][$this_window]['end'];
-        $this_expire_date_ts = !empty($this_expire_date ) ? strtotime($this_expire_date) : 0;
+        $this_expire_ts = !empty($this_expire_date ) ? strtotime($this_expire_date) : 0;
 
         /* We derive the next_change_date separately because it could be a start or an end for a
          * completely different window -- the current window may expire much further in the future
          * than a less restrictive upcoming window becomes active */
-        if (($this_available_ts > $current_timestamp) && ($this_available_ts < $next_change_date_ts)) {
-          $next_change_date = $this_available_date;
-          $next_change_date_ts = $this_available_ts;
+        if ($this_available_ts > $current_timestamp) {
+          if (empty($next_change_date_ts) || ($this_available_ts < $next_change_date_ts)) {
+            $next_change_date = $this_available_date;
+            $next_change_date_ts = $this_available_ts;
+          }
         }
-        if (($this_expire_ts > $current_timestamp) && ($this_expire_ts < $next_change_date_ts)) {
-          $next_change_date = $this_expire_date;
-          $next_change_date_ts = $this_expire_ts;
+        if ($this_expire_ts > $current_timestamp) { 
+          if (empty($next_change_date_ts) || ($this_expire_ts < $next_change_date_ts)) {
+            $next_change_date = $this_expire_date;
+            $next_change_date_ts = $this_expire_ts;
+          }
         }
                                                
         // but is this the current window?
