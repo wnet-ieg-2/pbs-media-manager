@@ -6,7 +6,7 @@
  *
  * Authors: William Tam (tamw@wnet.org), Augustus Mayo (amayo@tpt.org),
  * Aaron Crosman (aaron.crosman@cyberwoven.com), Jess Snyder (jsnyder@weta.org)
- * version 2.0.3 2017-10-31
+ * version 2.0.5 2021-04-13
  */
 
 /**
@@ -231,7 +231,8 @@ class PBS_Media_Manager_API_Client {
      * cid.
      */
     // Get just the URI.
-    preg_match("/(Location|URI): .*?\/([a-f0-9\-]+)\/(edit\/)?(\r|\n|\r\n)/", $result, $matches);
+    $matches = array();
+    preg_match("/(Location|URI): .*?\/([a-f0-9\-]+)\/(edit\/)?(\r|\n|\r\n)/i", $result, $matches);
 
     // TODO: Unsafe indexing, how should errors be handled?
     return $matches[2];
@@ -613,7 +614,7 @@ class PBS_Media_Manager_API_Client {
     $returnary = array();
     $parent = $this->get_item_of_type($parent_id, $parent_type);
 
-    if (empty($response_object['data']['attributes']['images'])) {
+    if (empty($parent['data']['attributes']['images'])) {
       return $returnary;
     }
 
@@ -715,6 +716,7 @@ class PBS_Media_Manager_API_Client {
     $response = $this->get_request($query);
     if (!empty($response["errors"]["info"]["http_code"]) && $response["errors"]["info"]["http_code"] == 404) {
       // If this video is private/unpublished, retry the edit endpoint.
+      $output_array = array();
       preg_match("/.*?(\/assets\/.*)\/$/", $response["errors"]["info"]["url"], $output_array);
       if (!empty($output_array[1])) {
         $response = $this->get_request($output_array[1] . "/edit/");
