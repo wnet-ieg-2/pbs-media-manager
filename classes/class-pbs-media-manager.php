@@ -55,6 +55,8 @@ class PBS_Media_Manager {
     $current_timestamp = strtotime("now");
     $next_available_date = false;
     $next_available_date_ts = 0;
+    $next_change_date = false;
+    $next_change_date_ts = 0;
     if (!empty($asset['errors'])) {
       // get the error code and return that
       $status = !empty($asset['errors']['info']['http_code']) ? $asset['errors']['info']['http_code'] : 'unknown_error';
@@ -66,6 +68,7 @@ class PBS_Media_Manager {
       // easier:  if a station uid was passed will we get this value, it will reflect the current availability
       $window = $attribs['availability_window'];
       $expire_date = $array['availabilities'][$window]['end']; // will either be null or a date string in the future
+      $next_change_date = $expire_date;
     } else {
       // go through from most restrictive to least 
       $windows = array('station_members', 'all_members', 'public');
@@ -75,12 +78,34 @@ class PBS_Media_Manager {
         }
         $this_available_date = $attribs['availabilities'][$this_window]['start'];
         $this_available_ts = strtotime($this_available_date);
+
+
+        $this_expire_date = $attribs['availabilities'][$this_window]['end'];
+        $this_expire_ts = !empty($this_expire_date ) ? strtotime($this_expire_date) : 0;
+
+        /* We derive the next_change_date separately because it could be a start or an end for a
+         * completely different window -- the current window may expire much further in the future
+         * than a less restrictive upcoming window becomes active */
+        if ($this_available_ts > $current_timestamp) {
+          if (empty($next_change_date_ts) || ($this_available_ts < $next_change_date_ts)) {
+            $next_change_date = $this_available_date;
+            $next_change_date_ts = $this_available_ts;
+          }
+        }
+        if ($this_expire_ts > $current_timestamp) { 
+          if (empty($next_change_date_ts) || ($this_expire_ts < $next_change_date_ts)) {
+            $next_change_date = $this_expire_date;
+            $next_change_date_ts = $this_expire_ts;
+          }
+        }
+                                               
+        // but is this the current window?
         if ($this_available_ts < $current_timestamp) {
           // the window started in the past, but may not have expired yet
-          if (empty( $attribs['availabilities'][$this_window]['end']) || (strtotime($attribs['availabilities'][$this_window]['end']) > $current_timestamp ) ) {
+          if (empty($this_expire_date_ts) || ($this_expire_date_ts > $current_timestamp ) ) {
             // expiration date is either unset or in the future, we are in this window now!
             $window = $this_window;
-            $expire_date = $attribs['availabilities'][$this_window]['end']; // will either be null or a date string in the future
+            $expire_date = $this_expire_date; // will either be null or a date string in the future
           }
           // the else case for above is that the window expired in the past, so we don't care about it
         } else {
@@ -98,7 +123,7 @@ class PBS_Media_Manager {
         }
       }
     }
-    $response = array('window' => $window, 'expiration_date' => $expire_date );
+    $response = array('window' => $window, 'expiration_date' => $expire_date, 'next_change_date' => $next_change_date );
     if ($window == 'not_available' && $next_available_date ) {
       $response['future_available_date'] = $next_available_date;
     }
