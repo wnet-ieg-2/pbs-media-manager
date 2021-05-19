@@ -102,7 +102,7 @@ class PBS_Media_Manager {
         // but is this the current window?
         if ($this_available_ts < $current_timestamp) {
           // the window started in the past, but may not have expired yet
-          if (empty($this_expire_date_ts) || ($this_expire_date_ts > $current_timestamp ) ) {
+          if (empty($this_expire_date) || ($this_expire_ts > $current_timestamp ) ) {
             // expiration date is either unset or in the future, we are in this window now!
             $window = $this_window;
             $expire_date = $this_expire_date; // will either be null or a date string in the future
