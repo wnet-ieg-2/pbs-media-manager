@@ -4,7 +4,7 @@
 Plugin Name: PBS Media Manager 
 Description: Support functions of the PBS Media Manager API.
 Author: William Tam / WNET
-Version: 0.3 
+Version: 0.4 
 */
 
 register_activation_hook(__FILE__ , 'pbs_media_manager_install');

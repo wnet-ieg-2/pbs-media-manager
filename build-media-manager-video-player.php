@@ -34,7 +34,7 @@ function build_media_manager_video_player($asset) {
     }
   }
  
-  $baseplayer = '<div class="passportcoveplayer" data-window="public" data-media="' . $tp_media_id . '"><div class="embed-container video-wrap"><iframe id="partnerPlayer" marginwidth="0" marginheight="0" scrolling="no" src="//player.pbs.org/widget/partnerplayer/' . $tp_media_id . '/?chapterbar=false" allowfullscreen="" frameborder="0"></iframe></div></div>';
+  $baseplayer = '<div class="passportcoveplayer" data-window="public" data-media="' . $tp_media_id . '"><div class="embed-container video-wrap"><iframe id="partnerPlayer" marginwidth="0" marginheight="0" scrolling="no" src="//player.pbs.org/widget/partnerplayer/' . $tp_media_id . '/?chapterbar=false" allow="encrypted-media" allowfullscreen="" frameborder="0"></iframe></div></div>';
 
  
   // Display a "public" video as is
