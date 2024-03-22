@@ -1,0 +1,21 @@
+name: Trigger PBS Container Build
+
+on:
+  push:
+    branches:
+      - 'dev'
+
+jobs:
+  trigger:
+    name: Trigger PBS Container Build
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Trigger PBS Container Build
+        uses: benc-uk/workflow-dispatch@v1
+      
+        with:
+          workflow: image.dev.yml
+          repo: wnet-ieg-2/pbs-container
+          token: ${{ secrets.PBS_TOKEN }}
+          ref: refs/heads/dev
